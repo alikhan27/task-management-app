@@ -36,3 +36,27 @@ body {
   color: #fff;
   cursor: pointer;
 }
+
+.task-list {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  background: #fafafa;
+  box-shadow: inset #a0a0a0 0px 0px 5px
+}
+
+.task-list h3 {
+  margin: 0;
+}
+
+.task-list p {
+  margin-top: 0;
+}
+
+.task-list .task {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.task-list .task:last-child {
+  border-bottom: none
+}
