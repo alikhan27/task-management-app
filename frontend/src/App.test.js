@@ -2,12 +2,12 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
-test('renders learn react link', () => {
+test('should render the app title text in h1', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Task Management App/i);
+  const text = screen.getByText(/Task Management App/i);
   const h1 = screen.getByRole('heading', {level: 1});
   expect(h1).toBeInTheDocument();
-  expect(linkElement).toBeInTheDocument();
+  expect(text).toBeInTheDocument();
 });
 
 test('renders No Task Available', () => {
