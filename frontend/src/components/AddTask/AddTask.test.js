@@ -58,6 +58,12 @@ describe("It should render the Add Task Component", () => {
         })
         expect(screen.getByLabelText(/title/i)).toHaveValue('');
         expect(screen.getByLabelText(/description/i)).toHaveValue('');
+        expect(handleAddTask).toHaveBeenCalledWith(
+            {
+                title: 'Testing 1',
+                description: 'Testing the description content'
+            }
+        )
     })
     
 })
