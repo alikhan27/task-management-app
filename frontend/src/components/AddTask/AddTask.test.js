@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import AddTask from './AddTask';
 
 describe("It should render the Add Task Component", () => {
@@ -32,4 +33,31 @@ describe("It should render the Add Task Component", () => {
         const input = screen.getByTestId('add-task');
         expect(input).toBeInTheDocument();
     })
+    it('should show the user entered value in the form fields', () => {
+        const handleAddTask = jest.fn();
+        render(<AddTask onAddTask={handleAddTask} />);
+        const input = screen.getByLabelText('Title', {selector: 'input'});;
+        const textarea = screen.getByLabelText('Description', {selector: 'textarea'});
+        act(() => {
+            userEvent.type(input, 'Testing 1');
+            userEvent.type(textarea, 'Testing the description content');
+        })
+        expect(screen.getByLabelText(/title/i)).toHaveValue('Testing 1');
+        expect(screen.getByLabelText(/description/i)).toHaveValue('Testing the description content');
+    })
+    it('should clear the form field on Add Task', () => {
+        const handleAddTask = jest.fn();
+        render(<AddTask onAddTask={handleAddTask} />);
+        const input = screen.getByLabelText('Title', {selector: 'input'});;
+        const textarea = screen.getByLabelText('Description', {selector: 'textarea'});
+        const AddTaskBtn = screen.getByTestId('add-task');
+        act(() => {
+            userEvent.type(input, 'Testing 1');
+            userEvent.type(textarea, 'Testing the description content');
+            userEvent.click(AddTaskBtn)
+        })
+        expect(screen.getByLabelText(/title/i)).toHaveValue('');
+        expect(screen.getByLabelText(/description/i)).toHaveValue('');
+    })
+    
 })
