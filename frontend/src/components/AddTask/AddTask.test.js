@@ -80,4 +80,27 @@ describe("It should render the Add Task Component", () => {
         expect(screen.getByLabelText(/title/i)).toHaveValue('John Doe');
         expect(screen.getByLabelText(/description/i)).toHaveValue('Author of the app');
     })
+    it('should update the forms and clear the fields ', () => {
+        const handleUpdateTask = jest.fn();
+        render(<AddTask onUpdateTask={handleUpdateTask}  toEditTask={{title: "John Doe", description:"Author of the app", id: 1}}/>);
+        expect(screen.getByLabelText(/title/i)).toHaveValue('John Doe');
+        expect(screen.getByLabelText(/description/i)).toHaveValue('Author of the app');
+
+        const input = screen.getByLabelText('Title', {selector: 'input'});;
+        const textarea = screen.getByLabelText('Description', {selector: 'textarea'});
+        const editbtn = screen.getByTestId('edit-task');
+        act(() => {
+            userEvent.type(input, 'Testing edit title');
+            userEvent.type(textarea, 'Testing edit description content');
+        })
+        expect(screen.getByLabelText(/title/i)).toHaveValue('John DoeTesting edit title');
+        expect(screen.getByLabelText(/description/i)).toHaveValue('Author of the appTesting edit description content');
+        act(() => {
+            userEvent.click(editbtn);
+        })
+        const addbtn = screen.getByTestId('add-task');
+        expect(screen.getByLabelText(/title/i)).toHaveValue('');
+        expect(screen.getByLabelText(/description/i)).toHaveValue('');
+        expect(addbtn).toBeInTheDocument()
+    })
 })

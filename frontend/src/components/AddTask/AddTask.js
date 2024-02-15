@@ -19,7 +19,7 @@ export default function AddTask({ onAddTask, toEditTask, onUpdateTask }) {
 
     let button;
     if(isEdit) {
-        button = <button className="btn" data-testid="edit-task">Update Task</button>
+        button = <button className="btn" data-testid="edit-task" onClick={updateTask}>Update Task</button>
     } else {
         button = <button className="btn" data-testid="add-task" onClick={addTask}>Add Task</button>
     }
@@ -28,6 +28,15 @@ export default function AddTask({ onAddTask, toEditTask, onUpdateTask }) {
         e.preventDefault();
         if(values.title.trim().length && values.description.trim().length) {
             onAddTask(values);
+            setValues(initialValue);
+        }
+    }
+
+    function updateTask(e) {
+        e.preventDefault();
+        if(values.title.trim().length && values.description.trim().length) {
+            onUpdateTask(values);
+            setIsEdit(false);
             setValues(initialValue);
         }
     }
