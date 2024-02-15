@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const createError = require('http-errors');
 
-const tasks = [{title: 'John Doe', description: 'Teaching science'}];
+let tasks = [{title: 'John Doe', description: 'Teaching science'}];
 
 router.get('/api/tasks', (req, res) => {
   res.json(tasks);
@@ -53,5 +53,10 @@ router.put('/api/update/:id', (req, res, next) => {
     tasks[req.params.id - 1] = newTask;
     res.status(201).json(newTask);
 })
+
+router.delete('/api/delete/:id', (req, res) => {
+    tasks = tasks.filter((item, index) => (req.params.id - 1) !== index)
+    res.json("Item Removed Successfully.");
+});
 
 module.exports = router;

@@ -61,4 +61,16 @@ describe("GET /", () => {
             })
         )
     });
+
+    it('DELETE /api/delete/:id => removes the existing item', () => {
+        return request(app)
+        .delete('/api/delete/1')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then((response) => {
+            expect(response.body).toEqual(
+                'Item Removed Successfully.'
+            )
+        })
+    })
 })
