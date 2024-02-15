@@ -20,4 +20,17 @@ router.get('/api/task/:id', (req, res, next) => {
       res.json(task);
 });
 
+router.post('/api/addtask', (req, res, next) => {
+    const {title, description} = req.body;
+    if(typeof title !== 'string' || typeof description !== 'string') {
+        return next(createError(400, 'Validation Error'));
+    }
+    const newTask = {
+        title,
+        description
+    }
+    tasks.push(newTask);
+    res.status(201).json(newTask);
+})
+
 module.exports = router;
