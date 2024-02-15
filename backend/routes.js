@@ -33,4 +33,25 @@ router.post('/api/addtask', (req, res, next) => {
     res.status(201).json(newTask);
 })
 
+router.put('/api/update/:id', (req, res, next) => {
+    const {title, description} = req.body;
+    if(typeof title !== 'string' || typeof description !== 'string' ) {
+        return next(createError(400, 'Validation Error'));
+    }
+    const task = tasks.find(
+        (task, index) => String(index+1) === String(req.params.id)
+        );
+
+    if (!task) {
+        return next(createError(404, 'Not Found'));
+      }
+
+    const newTask = {
+        title,
+        description
+    }
+    tasks[req.params.id - 1] = newTask;
+    res.status(201).json(newTask);
+})
+
 module.exports = router;

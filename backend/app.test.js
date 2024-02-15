@@ -47,4 +47,18 @@ describe("GET /", () => {
             })
         )
     });
+
+    it('PUT /api/update/:id => updates the existing item', () => {
+        return (request(app)
+            .put('/api/update/1')
+            .send({title: 'Meeting', description: 'Meet the doctor in evening'})
+            .expect('Content-Type', /json/)
+            .expect(201)
+            .then((response) => {
+                expect(response.body).toEqual(
+                    expect.objectContaining({title: 'Meeting', description: 'Meet the doctor in evening'})
+                )
+            })
+        )
+    });
 })
