@@ -57,6 +57,15 @@ body {
   margin-bottom: 10px;
   border-bottom: 1px solid #ccc;
 }
+
 .task-list .task:last-child {
   border-bottom: none
+}
+
+.btn-container {
+  display: flex;
+  position: absolute;
+  right: 21px;
+  margin-top: -24px;
+  gap: 10px;
 }
