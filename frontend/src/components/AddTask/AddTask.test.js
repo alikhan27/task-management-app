@@ -65,5 +65,19 @@ describe("It should render the Add Task Component", () => {
             }
         )
     })
-    
+    it('should render the button as Add Task', () => {
+        render(<AddTask toEditTask={null}/>);
+        const editbtn = screen.getByTestId('add-task');
+        expect(editbtn).toHaveTextContent('Add Task');
+    })
+    it('should render the button as Update Task', () => {
+        render(<AddTask toEditTask={{title: "John Doe", description:"Author of the app", id: 1}}/>);
+        const editbtn = screen.getByTestId('edit-task');
+        expect(editbtn).toHaveTextContent('Update Task');
+    })
+    it('should render the textbox with value', () => {
+        render(<AddTask toEditTask={{title: "John Doe", description:"Author of the app", id: 1}}/>);
+        expect(screen.getByLabelText(/title/i)).toHaveValue('John Doe');
+        expect(screen.getByLabelText(/description/i)).toHaveValue('Author of the app');
+    })
 })

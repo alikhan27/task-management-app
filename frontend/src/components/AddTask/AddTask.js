@@ -1,16 +1,30 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-export default function AddTask({ onAddTask }) {
-
+export default function AddTask({ onAddTask, toEditTask, onUpdateTask }) {
+    useEffect(()=> {
+        if(toEditTask)  {
+            setValues(toEditTask);
+            setIsEdit(true);
+        };
+        
+    }, [toEditTask])
+    
     const initialValue = {
         title: '',
         description: ''
     };
 
     const [values, setValues] = useState(initialValue);
+    const [isEdit, setIsEdit] = useState(false);
+
+    let button;
+    if(isEdit) {
+        button = <button className="btn" data-testid="edit-task">Update Task</button>
+    } else {
+        button = <button className="btn" data-testid="add-task" onClick={addTask}>Add Task</button>
+    }
 
     function addTask(e) {
-        
         e.preventDefault();
         if(values.title.trim().length && values.description.trim().length) {
             onAddTask(values);
@@ -40,7 +54,7 @@ export default function AddTask({ onAddTask }) {
                 <textarea className="form-control" name="description" id="desc" onChange={handleChange} value={values.description} />
             </div>
             <div className="btn-group">
-                <button className="btn" data-testid="add-task" onClick={addTask}>Add Task</button>
+                {button}
             </div>
         </form>
     </div>)
