@@ -29,9 +29,11 @@ test('should rended the first task list', () => {
   const titleEl = screen.getByText('Testing 1');
   const descEl = screen.getByText('Testing the description content');
   const editbtn = screen.getByTestId('editbtn');
+  const deletebtn = screen.getByTestId('deletebtn');
   expect(titleEl).toBeInTheDocument();
   expect(descEl).toBeInTheDocument();
   expect(editbtn).toBeInTheDocument();
+  expect(deletebtn).toBeInTheDocument();
 })
 
 test('should update the first task list', () => {
@@ -69,4 +71,29 @@ test('should update the first task list', () => {
   });
   expect(screen.getByText('Testing 1 modified')).toBeInTheDocument();
   expect(screen.getByText('Testing the description content modified')).toBeInTheDocument();
+})
+test('should delete the first task list and display No Task Available', () => {
+  render(<App />);
+  const input = screen.getByLabelText('Title', { selector: 'input' });;
+  const textarea = screen.getByLabelText('Description', { selector: 'textarea' });
+  const AddTaskBtn = screen.getByTestId('add-task');
+  act(() => {
+    userEvent.type(input, 'John Doe');
+    userEvent.type(textarea, 'Description for John Doe');
+    userEvent.click(AddTaskBtn)
+  });
+  
+  const deletebtn = screen.getAllByTestId('deletebtn')[0];
+  expect(deletebtn).toBeInTheDocument();
+  expect(screen.getByLabelText(/title/i)).toHaveValue('');
+  expect(screen.getByLabelText(/description/i)).toHaveValue('');
+
+  expect(screen.getByText('John Doe')).toBeInTheDocument();
+  expect(screen.getByText('Description for John Doe')).toBeInTheDocument();
+  act(() => {
+    userEvent.click(deletebtn)
+  });
+  expect(screen.queryByText('John Doe')).toBeNull();
+  expect(screen.queryByText('Description for John Doe')).toBeNull();
+  expect(screen.getByText('No Task Available.!')).toBeInTheDocument()
 })
