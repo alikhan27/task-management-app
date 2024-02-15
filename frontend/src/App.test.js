@@ -28,6 +28,45 @@ test('should rended the first task list', () => {
   });
   const titleEl = screen.getByText('Testing 1');
   const descEl = screen.getByText('Testing the description content');
+  const editbtn = screen.getByTestId('editbtn');
   expect(titleEl).toBeInTheDocument();
   expect(descEl).toBeInTheDocument();
+  expect(editbtn).toBeInTheDocument();
+})
+
+test('should update the first task list', () => {
+  render(<App />);
+  const input = screen.getByLabelText('Title', { selector: 'input' });;
+  const textarea = screen.getByLabelText('Description', { selector: 'textarea' });
+  const AddTaskBtn = screen.getByTestId('add-task');
+  act(() => {
+    userEvent.type(input, 'Testing 1');
+    userEvent.type(textarea, 'Testing the description content');
+    userEvent.click(AddTaskBtn)
+  });
+  const editbtn = screen.getAllByTestId('editbtn')[0];
+  expect(editbtn).toBeInTheDocument();
+  expect(screen.getByLabelText(/title/i)).toHaveValue('');
+  expect(screen.getByLabelText(/description/i)).toHaveValue('');
+
+  expect(screen.getByText('Testing 1')).toBeInTheDocument();
+  expect(screen.getByText('Testing the description content')).toBeInTheDocument();
+  
+  act(() => {
+    userEvent.click(editbtn);
+    const input = screen.getByLabelText('Title', {selector: 'input'});;
+    const textarea = screen.getByLabelText('Description', {selector: 'textarea'});
+  
+  });
+  expect(screen.getByLabelText(/title/i)).toHaveValue('Testing 1');
+  expect(screen.getByLabelText(/description/i)).toHaveValue('Testing the description content');
+
+  act(() => {
+    const edittask = screen.getByTestId('edit-task');
+    userEvent.type(input, ' modified');
+    userEvent.type(textarea, ' modified');
+    userEvent.click(edittask);
+  });
+  expect(screen.getByText('Testing 1 modified')).toBeInTheDocument();
+  expect(screen.getByText('Testing the description content modified')).toBeInTheDocument();
 })

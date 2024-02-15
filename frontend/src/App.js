@@ -16,6 +16,20 @@ function App() {
     });
   }
 
+  function handleUpdateTask(updatedTask) {
+    let newData = data.map((task, index) => {
+      if(index === updatedTask.id) {
+        let {title, description} = updatedTask;
+        return {
+          title,
+          description
+        }
+      }
+      return task;
+    });
+    setData(newData);
+  }
+  
   function handleDeleteTask(id) {
     let newData = data.filter((task, index) => {
       return index !== id
@@ -26,7 +40,7 @@ function App() {
   return (
     <div className="App">
       <h1>Task Management App</h1>
-      <AddTask onAddTask={handleAddTask} />
+      <AddTask onAddTask={handleAddTask} onUpdateTask={handleUpdateTask} toEditTask={editData}/>
       <ViewTasks>
         {data.map(({ title, description }, index) => {
           
