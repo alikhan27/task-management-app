@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import AddTask from './components/AddTask/AddTask';
 import ViewTasks from './components/ViewTasks/ViewTasks';
@@ -6,8 +6,37 @@ import Task from './components/Task/Task';
 function App() {
   const [data, setData] = useState([]);
   const [editData, setEditData] = useState(null);
+  const URL ="http://127.0.0.1:4000/api/";
+
+  useEffect(() => {
+    fetch(URL+"tasks", {
+      method: "GET",
+    })
+    .then((response) => response.json())
+    .then(data => {
+      setData(data)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  },[]);
+
   function handleAddTask(task) {
-    setData([{ ...task }, ...data]);
+    
+    fetch(URL+"addtask", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(task)
+    })
+    .then((response) => response.json())
+    .then(task => {
+      setData([ ...data , task]);
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 
   function handleEditTask(id) {
@@ -16,25 +45,39 @@ function App() {
     });
   }
 
-  function handleUpdateTask(updatedTask) {
-    let newData = data.map((task, index) => {
-      if(index === updatedTask.id) {
-        let {title, description} = updatedTask;
-        return {
-          title,
-          description
-        }
-      }
-      return task;
-    });
-    setData(newData);
+  function handleUpdateTask({title, description, id}) {
+    fetch(URL+"update/"+(id+1), {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({title, description})
+    })
+    .then((response) => response.json())
+    .then(task => {
+      let newData = [...data];
+      newData[id] = task;
+      setData(newData);
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
   
   function handleDeleteTask(id) {
-    let newData = data.filter((task, index) => {
-      return index !== id
-    });
-    setData(newData);
+    fetch(URL+"delete/"+(id+1), {
+      method: "DELETE"
+    })
+    .then((response) => response.json())
+    .then(msg => {
+      let newData = data.filter((task, index) => {
+        return (index) !== id
+      });
+      setData(newData);
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 
   return (

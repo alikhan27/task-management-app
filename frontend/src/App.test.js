@@ -1,11 +1,11 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
 test('should render the app title text in h1', () => {
   render(<App />);
   const text = screen.getByText(/Task Management App/i);
-  const h1 = screen.getByRole('heading', {level: 1});
+  const h1 = screen.getByRole('heading', { level: 1 });
   expect(h1).toBeInTheDocument();
   expect(text).toBeInTheDocument();
 });
@@ -16,7 +16,7 @@ test('renders No Task Available', () => {
   expect(el).toBeInTheDocument();
 });
 
-test('should rended the first task list', () => {
+test('should rended the first task list', async () => {
   render(<App />);
   const input = screen.getByLabelText('Title', { selector: 'input' });;
   const textarea = screen.getByLabelText('Description', { selector: 'textarea' });
@@ -26,7 +26,7 @@ test('should rended the first task list', () => {
     userEvent.type(textarea, 'Testing the description content');
     userEvent.click(AddTaskBtn)
   });
-  const titleEl = screen.getByText('Testing 1');
+  const titleEl = await screen.findByText('Testing 1');
   const descEl = screen.getByText('Testing the description content');
   const editbtn = screen.getByTestId('editbtn');
   const deletebtn = screen.getByTestId('deletebtn');
@@ -36,7 +36,7 @@ test('should rended the first task list', () => {
   expect(deletebtn).toBeInTheDocument();
 })
 
-test('should update the first task list', () => {
+test('should update the first task list', async () => {
   render(<App />);
   const input = screen.getByLabelText('Title', { selector: 'input' });;
   const textarea = screen.getByLabelText('Description', { selector: 'textarea' });
@@ -46,19 +46,21 @@ test('should update the first task list', () => {
     userEvent.type(textarea, 'Testing the description content');
     userEvent.click(AddTaskBtn)
   });
-  const editbtn = screen.getAllByTestId('editbtn')[0];
-  expect(editbtn).toBeInTheDocument();
+
   expect(screen.getByLabelText(/title/i)).toHaveValue('');
   expect(screen.getByLabelText(/description/i)).toHaveValue('');
 
-  expect(screen.getByText('Testing 1')).toBeInTheDocument();
+  expect(await screen.findByText('Testing 1')).toBeInTheDocument();
   expect(screen.getByText('Testing the description content')).toBeInTheDocument();
-  
+
+  const editbtn = screen.getAllByTestId('editbtn')[0];
+  expect(editbtn).toBeInTheDocument();
+
   act(() => {
     userEvent.click(editbtn);
-    const input = screen.getByLabelText('Title', {selector: 'input'});;
-    const textarea = screen.getByLabelText('Description', {selector: 'textarea'});
-  
+    const input = screen.getByLabelText('Title', { selector: 'input' });;
+    const textarea = screen.getByLabelText('Description', { selector: 'textarea' });
+
   });
   expect(screen.getByLabelText(/title/i)).toHaveValue('Testing 1');
   expect(screen.getByLabelText(/description/i)).toHaveValue('Testing the description content');
@@ -69,10 +71,11 @@ test('should update the first task list', () => {
     userEvent.type(textarea, ' modified');
     userEvent.click(edittask);
   });
-  expect(screen.getByText('Testing 1 modified')).toBeInTheDocument();
+  expect(await screen.findByText('Testing 1 modified')).toBeInTheDocument();
   expect(screen.getByText('Testing the description content modified')).toBeInTheDocument();
 })
-test('should delete the first task list and display No Task Available', () => {
+test('should delete the first task list and display No Task Available', async () => {
+
   render(<App />);
   const input = screen.getByLabelText('Title', { selector: 'input' });;
   const textarea = screen.getByLabelText('Description', { selector: 'textarea' });
@@ -82,18 +85,29 @@ test('should delete the first task list and display No Task Available', () => {
     userEvent.type(textarea, 'Description for John Doe');
     userEvent.click(AddTaskBtn)
   });
-  
-  const deletebtn = screen.getAllByTestId('deletebtn')[0];
-  expect(deletebtn).toBeInTheDocument();
+
+  waitFor(() => {
+    const deletebtn = screen.getAllByTestId('deletebtn')[0];
+    expect(deletebtn).toBeInTheDocument();
+  });
   expect(screen.getByLabelText(/title/i)).toHaveValue('');
   expect(screen.getByLabelText(/description/i)).toHaveValue('');
 
-  expect(screen.getByText('John Doe')).toBeInTheDocument();
+  expect(await screen.findByText('John Doe')).toBeInTheDocument();
   expect(screen.getByText('Description for John Doe')).toBeInTheDocument();
-  act(() => {
+
+  const deletebtn = screen.getAllByTestId('deletebtn')[0];
+  act(()=> {
+
     userEvent.click(deletebtn)
-  });
-  expect(screen.queryByText('John Doe')).toBeNull();
-  expect(screen.queryByText('Description for John Doe')).toBeNull();
-  expect(screen.getByText('No Task Available.!')).toBeInTheDocument()
+  })
+  waitFor(() => {
+    expect(screen.queryByText('John Doe')).toBeNull();
+  })
+  waitFor(() => {
+    expect(screen.queryByText('Description for John Doe')).toBeNull();
+  })
+  waitFor(() => {
+    expect(screen.getByText('No Task Available.!')).toBeInTheDocument();
+  })
 })
