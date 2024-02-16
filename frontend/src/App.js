@@ -83,6 +83,7 @@ function App() {
   return (
     <div className="App">
       <h1>Task Management App</h1>
+      <main className='main-container'>
       <AddTask onAddTask={handleAddTask} onUpdateTask={handleUpdateTask} toEditTask={editData}/>
       <ViewTasks>
         {data.map(({ title, description }, index) => {
@@ -91,6 +92,7 @@ function App() {
         })}
         {!data.length && 'No Task Available.!'}
       </ViewTasks>
+      </main>
     </div>
   );
 }

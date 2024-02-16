@@ -62,7 +62,7 @@ export default function AddTask({ onAddTask, toEditTask, onUpdateTask }) {
                 <label htmlFor="desc">Description</label>
                 <textarea className="form-control" name="description" id="desc" onChange={handleChange} value={values.description} />
             </div>
-            <div className="btn-group">
+            <div className="btn-group align-right">
                 {button}
             </div>
         </form>

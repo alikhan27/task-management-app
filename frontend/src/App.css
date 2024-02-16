@@ -1,18 +1,49 @@
 body {
+  background: rgb(191,250,255);
+  background: linear-gradient(180deg, rgba(192,227,255,1) 0%, rgba(239,248,255,1) 100%);
   margin: 1rem;
   color: #222;
+  scroll-behavior: smooth;
+  min-height: 100vh;
+}
+h1 {
+  background: #1E30D3;
+  background: linear-gradient(to right, #1E30D3 0%, #AF1C88 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+.main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .add-task-container {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  background: #f1f0f0;
-  border: 1px solid #ccc;
+  background-color: #dcf0ff;
+  min-width: 18rem;
 }
 
 .add-task-container h2 {
   margin-top: 0;
+  border-bottom: 1px dashed #3d3d3d;
+  padding: 0 0 0.5rem;
+  color: #262fcf;
+}
+
+.view-task-container {
+  background-color: #dcf0ff;
+  flex: 1 1 auto;
+}
+
+.view-task-container>h2 {
+  background: #60a3e8;
+  padding: 1rem;
+  color: #FFF;
+  margin: 0 0 0.5rem;
 }
 
 .form-group {
@@ -23,30 +54,36 @@ body {
 
 .form-control {
   border: 1px solid #a0a0a0;
-  margin-top: 0.25rem;
-  padding: 0.25rem;
+    margin-top: 0.25rem;
+    padding: 0.25rem;
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+
+textarea.form-control {
+  min-height: 100px;
 }
 
 .btn {
   font-size: 1rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 0.5rem;
-  background-color: #6091e9;
+  background-color: #60a3e8;
+  border: 1px solid #3771b0;
   color: #fff;
   cursor: pointer;
 }
 
 .task-list {
   list-style: none;
-  padding: 10px;
+  padding: 1rem;
   margin: 0;
-  background: #fafafa;
-  box-shadow: inset #a0a0a0 0px 0px 5px
+  text-align: center;
 }
 
 .task-list h3 {
-  margin: 0;
+  margin: .5rem 0;
 }
 
 .task-list p {
@@ -54,18 +91,24 @@ body {
 }
 
 .task-list .task {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-.task-list .task:last-child {
-  border-bottom: none
+  border-bottom: 1px dashed #889fc9;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
 }
 
 .btn-container {
   display: flex;
-  position: absolute;
-  right: 21px;
-  margin-top: -24px;
+  align-items: center;
   gap: 10px;
+}
+
+.align-right {
+  text-align: right;
+}
+
+@media screen and (min-width: 1024px) {
+  .main-container {
+    flex-direction: row;
+  }
 }
